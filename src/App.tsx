@@ -1,18 +1,42 @@
+import { useAppStore } from './store/useAppStore';
+import Dashboard from './pages/Dashboard';
+import Preview from './pages/Preview';
+import History from './pages/History';
+import Settings from './pages/Settings';
+import type {
+  ScanResult,
+  ApplyResult,
+  Revision,
+  RestoreItemResult,
+  Template,
+  FilePlan,
+} from './types';
+
 declare global {
   interface Window {
     flowdesk: {
-      ping: () => string;
+      scanFolder:      (folderPath: string) => Promise<ScanResult>;
+      selectFolder:    ()                   => Promise<string | null>;
+      applyPlan:       (plans: FilePlan[])  => Promise<ApplyResult>;
+      getRevisions:    ()                   => Promise<Revision[]>;
+      restoreRevision: (revisionId: number) => Promise<RestoreItemResult[]>;
+      restoreFiles:    (fileIds: number[])  => Promise<RestoreItemResult[]>;
+      getTemplates:    ()                   => Promise<Template[]>;
+      saveTemplate:    (t: Omit<Template, 'id'>) => Promise<void>;
+      deleteTemplate:  (id: number)         => Promise<void>;
     };
   }
 }
 
-function App() {
-  return (
-    <div>
-      <h1>Flowdesk</h1>
-      <p>{window.flowdesk.ping()}</p>
-    </div>
-  )
-}
+export default function App() {
+  const currentPage = useAppStore((s) => s.currentPage);
 
-export default App;
+  return (
+    <div className="app">
+      {currentPage === 'dashboard' && <Dashboard />}
+      {currentPage === 'preview'   && <Preview />}
+      {currentPage === 'history'   && <History />}
+      {currentPage === 'settings'  && <Settings />}
+    </div>
+  );
+}

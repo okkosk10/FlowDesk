@@ -9,15 +9,40 @@
     "dev:electron": "wait-on tcp:5173 && cross-env ELECTRON_ENABLE_LOGGING=true electron .",
     "dev": "concurrently \"npm run dev:web\" \"npm run dev:electron\"",
     "build": "vite build",
+    "build:app": "vite build && electron-builder",
+    "rebuild": "electron-rebuild -f -w better-sqlite3",
     "lint": "eslint .",
     "preview": "vite preview"
   },
+  "build": {
+    "appId": "com.flowdesk.app",
+    "productName": "FlowDesk",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "dist/**/*",
+      "electron/**/*"
+    ],
+    "win": {
+      "target": "nsis"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    }
+  },
   "dependencies": {
+    "better-sqlite3": "^12.9.0",
+    "chokidar": "^5.0.0",
     "react": "^19.2.5",
-    "react-dom": "^19.2.5"
+    "react-dom": "^19.2.5",
+    "zustand": "^5.0.12"
   },
   "devDependencies": {
+    "@electron/rebuild": "^4.0.3",
     "@eslint/js": "^9.39.4",
+    "@types/better-sqlite3": "^7.6.13",
     "@types/node": "^24.12.2",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
@@ -25,6 +50,7 @@
     "concurrently": "^9.2.1",
     "cross-env": "^10.1.0",
     "electron": "^41.2.1",
+    "electron-builder": "^26.8.1",
     "eslint": "^9.39.4",
     "eslint-plugin-react-hooks": "^7.1.1",
     "eslint-plugin-react-refresh": "^0.5.2",
