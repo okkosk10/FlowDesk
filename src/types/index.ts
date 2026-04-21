@@ -65,6 +65,8 @@ export interface ScanResult {
 
 export interface ApplyResult {
   revisionId?: number;
+  successCount?: number;
+  failed?: { name: string; reason: string }[];
   error?: string;
 }
 

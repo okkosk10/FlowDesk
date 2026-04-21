@@ -28,6 +28,17 @@ export default function Preview() {
         alert(`실행 오류: ${result.error}`);
         return;
       }
+
+      // 실패한 파일이 있으면 알림
+      if (result.failed && result.failed.length > 0) {
+        const lines = result.failed
+          .map((f) => `• ${f.name}\n  → ${f.reason}`)
+          .join('\n');
+        alert(
+          `${result.successCount}개 완료, ${result.failed.length}개 건너뜀:\n\n${lines}\n\n열려 있는 파일은 닫은 후 다시 시도하세요.`
+        );
+      }
+
       setFilePlans([]);
       setCurrentPage('history');
     } finally {
