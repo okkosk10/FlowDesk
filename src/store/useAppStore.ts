@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import type { FilePlan, Revision, Page } from '../types';
+import type { FilePlan, FileEntry, Revision, Page } from '../types';
 
 interface AppStore {
   currentPage: Page;
@@ -7,6 +7,9 @@ interface AppStore {
 
   scanPath: string;
   setScanPath: (path: string) => void;
+
+  fileEntries: FileEntry[];
+  setFileEntries: (entries: FileEntry[]) => void;
 
   filePlans: FilePlan[];
   setFilePlans: (plans: FilePlan[]) => void;
@@ -21,6 +24,9 @@ export const useAppStore = create<AppStore>((set) => ({
 
   scanPath: '',
   setScanPath: (path) => set({ scanPath: path }),
+
+  fileEntries: [],
+  setFileEntries: (entries) => set({ fileEntries: entries }),
 
   filePlans: [],
   setFilePlans: (plans) => set({ filePlans: plans }),

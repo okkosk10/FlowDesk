@@ -2,33 +2,30 @@ import { useState } from 'react';
 import { useAppStore } from '../store/useAppStore';
 
 export default function Dashboard() {
-  const { scanPath, setScanPath, setFilePlans, setCurrentPage } = useAppStore();
-  const [scanning, setScanning] = useState(false);
+  const { setScanPath, setFileEntries, setCurrentPage } = useAppStore();
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   async function handleSelectFolder() {
     const selected = await window.flowdesk.selectFolder();
-    if (selected) setScanPath(selected);
-  }
+    if (!selected) return;
 
-  async function handleScan() {
-    if (!scanPath) return;
-    setScanning(true);
+    setScanPath(selected);
+    setLoading(true);
     setError(null);
+
     try {
-      const result = await window.flowdesk.scanFolder(scanPath);
+      const result = await window.flowdesk.listFiles(selected);
       if (result.error) {
         setError(result.error);
-      } else if (result.plans.length === 0) {
-        setError('정리할 파일이 없거나 템플릿에 매칭되는 파일이 없습니다. 설정에서 템플릿을 확인하세요.');
-      } else {
-        setFilePlans(result.plans);
-        setCurrentPage('preview');
+        return;
       }
+      setFileEntries(result.files);
+      setCurrentPage('folder-view');
     } catch (e) {
       setError(String(e));
     } finally {
-      setScanning(false);
+      setLoading(false);
     }
   }
 
@@ -37,24 +34,15 @@ export default function Dashboard() {
       <h1>FlowDesk</h1>
       <p className="subtitle">흐르는 파일을 조용히 정리합니다</p>
 
-      <div className="folder-select">
-        <input
-          type="text"
-          value={scanPath}
-          readOnly
-          placeholder="정리할 폴더를 선택하세요"
-        />
-        <button onClick={handleSelectFolder}>폴더 선택</button>
-      </div>
-
       {error && <p className="error">{error}</p>}
 
       <button
         className="btn-primary"
-        onClick={handleScan}
-        disabled={!scanPath || scanning}
+        onClick={handleSelectFolder}
+        disabled={loading}
+        style={{ fontSize: '1.05rem', padding: '14px 36px' }}
       >
-        {scanning ? '스캔 중...' : '지금 정리'}
+        {loading ? '불러오는 중...' : '폴더 열기'}
       </button>
 
       <div className="nav-links">
@@ -64,3 +52,4 @@ export default function Dashboard() {
     </div>
   );
 }
+

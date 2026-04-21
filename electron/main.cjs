@@ -23,6 +23,7 @@ function createWindow() {
 }
 
 app.whenReady().then(() => {
+  require('./ipc/folderHandler.cjs').registerFolderHandlers();
   require('./ipc/scanHandler.cjs').registerScanHandlers();
   require('./ipc/moveHandler.cjs').registerMoveHandlers();
   require('./ipc/restoreHandler.cjs').registerRestoreHandlers();

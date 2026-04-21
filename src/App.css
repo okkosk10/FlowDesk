@@ -324,3 +324,64 @@ td input[type='text'] {
   border-radius: 4px;
   font-size: 0.75rem;
 }
+
+/* ── FolderView ──────────────────────────────── */
+.folder-view .page-header {
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.category-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+
+.chip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  border: 1px solid #2a2a2a;
+  border-radius: 20px;
+  background: #141414;
+  color: #a0a0a0;
+  font-size: 0.82rem;
+  cursor: pointer;
+  transition: background 0.12s, border-color 0.12s;
+}
+
+.chip:hover {
+  background: #1e1e1e;
+  border-color: #444;
+}
+
+.chip-active {
+  border-color: #2563eb;
+  color: #93c5fd;
+  background: #1e293b;
+}
+
+.chip-count {
+  background: #2a2a2a;
+  color: #666;
+  border-radius: 10px;
+  padding: 1px 7px;
+  font-size: 0.75rem;
+}
+
+.chip-active .chip-count {
+  background: #1e3a5f;
+  color: #7dd3fc;
+}
+
+.file-table td .file-ext {
+  display: inline-block;
+  min-width: 36px;
+  color: #444;
+  font-size: 0.75rem;
+  font-family: 'Consolas', monospace;
+  margin-right: 6px;
+}
+

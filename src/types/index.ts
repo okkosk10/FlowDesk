@@ -1,3 +1,18 @@
+// ─── 폴더 파일 목록 ────────────────────────────────────────────────
+export interface FileEntry {
+  name: string;
+  ext: string;
+  fullPath: string;
+  size: number;
+  modifiedAt: string;   // ISO datetime string
+  category: string;     // 이미지 | 문서 | 동영상 | 음악 | 압축 | 실행파일 | 코드 | 기타
+}
+
+export interface FolderListResult {
+  files: FileEntry[];
+  error?: string;
+}
+
 // ─── 정리 계획 단위 ────────────────────────────────────────────────
 export interface FilePlan {
   id: string;           // 클라이언트 UUID (DB에 저장 안 됨)
@@ -60,4 +75,4 @@ export interface RestoreItemResult {
 }
 
 // ─── 앱 페이지 ────────────────────────────────────────────────────
-export type Page = 'dashboard' | 'preview' | 'history' | 'settings';
+export type Page = 'dashboard' | 'folder-view' | 'preview' | 'history' | 'settings';
