@@ -1,73 +1,56 @@
-# React + TypeScript + Vite
+# FlowDesk
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+> 흐르는 파일을 조용히 정리합니다
 
-Currently, two official plugins are available:
+FlowDesk는 Electron + React + TypeScript 기반의 데스크탑 파일 정리 앱입니다.  
+폴더를 선택하면 템플릿 규칙에 따라 파일을 자동으로 분류·이동하고, 언제든지 이전 상태로 복구할 수 있습니다.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## 주요 기능
 
-## React Compiler
+- **폴더 스캔** — 선택한 폴더의 파일 목록을 불러옵니다
+- **템플릿 기반 분류** — 확장자 또는 파일명 키워드로 파일을 원하는 폴더로 이동합니다
+- **미리보기** — 정리 계획을 적용 전 확인하고 개별 항목을 제외할 수 있습니다
+- **리비전 복구** — 정리 이력을 저장하여 파일을 원래 위치로 되돌릴 수 있습니다
+- **기본 템플릿** — 이미지·문서·동영상·음악·압축파일·실행파일·코드 등 기본 규칙 제공
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## 기술 스택
 
-## Expanding the ESLint configuration
+| 영역 | 기술 |
+|------|------|
+| UI | React 19, TypeScript, Zustand |
+| 빌드 | Vite, Electron |
+| DB | better-sqlite3 (SQLite) |
+| 패키징 | electron-builder |
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## 시작하기
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+```bash
+# 의존성 설치
+npm install
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+# 개발 서버 실행 (웹 + Electron 동시)
+npm run dev
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+# 앱 빌드 (배포용 인스톨러 생성)
+npm run build:app
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+> `better-sqlite3` 네이티브 모듈 재빌드가 필요한 경우:
+> ```bash
+> npm run rebuild
+> ```
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## 프로젝트 구조
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```
+electron/          # Electron 메인 프로세스
+  main.cjs
+  preload.cjs
+  core/            # 파일 스캔 & 템플릿 매칭 로직
+  db/              # SQLite 스키마 & 쿼리
+  ipc/             # IPC 핸들러 (폴더, 이동, 복구, 스캔)
+src/               # React 렌더러 프로세스
+  pages/           # Dashboard / FolderView / Preview / History / Settings
+  store/           # Zustand 전역 상태
+  types/           # 공유 타입 정의
 ```
