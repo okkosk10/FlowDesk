@@ -27,6 +27,8 @@ app.whenReady().then(() => {
   require('./ipc/scanHandler.cjs').registerScanHandlers();
   require('./ipc/moveHandler.cjs').registerMoveHandlers();
   require('./ipc/restoreHandler.cjs').registerRestoreHandlers();
+  require('./ipc/templateHandler.cjs').registerTemplateHandlers();
+  require('./ipc/historyHandler.cjs').registerHistoryHandlers();
   createWindow();
 });
 

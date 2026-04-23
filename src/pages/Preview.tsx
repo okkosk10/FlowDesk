@@ -2,7 +2,8 @@ import { useState } from 'react';
 import { useAppStore } from '../store/useAppStore';
 
 export default function Preview() {
-  const { filePlans, setFilePlans, setCurrentPage } = useAppStore();
+  const { filePlans, setFilePlans, setCurrentPage, scanPath,
+          totalScanned, unmatchedCount } = useAppStore();
   const [applying, setApplying] = useState(false);
 
   const included = filePlans.filter((p) => !p.excluded);
@@ -23,7 +24,12 @@ export default function Preview() {
     if (included.length === 0) return;
     setApplying(true);
     try {
-      const result = await window.flowdesk.applyPlan(included);
+      const result = await window.flowdesk.applyPlan({
+        basePath: scanPath,
+        plans: included,
+        totalScanned,
+        unmatchedCount,
+      });
       if (result.error) {
         alert(`실행 오류: ${result.error}`);
         return;

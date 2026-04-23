@@ -6,7 +6,12 @@ const { randomUUID } = require('crypto');
  * 확장자 → 키워드 순으로 우선 매칭
  */
 function matchTemplate(file, templates) {
-  for (const template of templates) {
+  // enabled=1인 템플릿만, priority ASC 순서로 평가
+  const active = [...templates]
+    .filter((t) => t.enabled !== 0)
+    .sort((a, b) => (a.priority ?? 0) - (b.priority ?? 0));
+
+  for (const template of active) {
     const extensions = template.extensions
       .split(',')
       .map((e) => e.trim().toLowerCase())

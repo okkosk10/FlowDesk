@@ -44,7 +44,8 @@ function CategoryBadge({ category }: { category: string }) {
 type SortKey = 'name' | 'category' | 'size' | 'modifiedAt';
 
 export default function FolderView() {
-  const { scanPath, fileEntries, setFilePlans, setCurrentPage } = useAppStore();
+  const { scanPath, fileEntries, setFilePlans, setCurrentPage,
+          setTotalScanned, setUnmatchedCount } = useAppStore();
   const [sortKey, setSortKey] = useState<SortKey>('category');
   const [sortAsc, setSortAsc] = useState(true);
   const [filterCategory, setFilterCategory] = useState<string>('전체');
@@ -110,6 +111,8 @@ export default function FolderView() {
         return;
       }
       setFilePlans(result.plans);
+      setTotalScanned(result.totalScanned ?? result.plans.length);
+      setUnmatchedCount(result.unmatchedCount ?? 0);
       setCurrentPage('preview');
     } finally {
       setScanning(false);

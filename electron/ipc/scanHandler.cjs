@@ -7,12 +7,16 @@ function registerScanHandlers() {
   ipcMain.handle('scan:folder', async (_event, folderPath) => {
     try {
       const db = getDb();
-      const templates = db.prepare('SELECT * FROM templates').all();
+      const templates = db.prepare('SELECT * FROM templates ORDER BY priority ASC, id ASC').all();
       const files = scanFolder(folderPath);
       const plans = buildPlans(files, templates, folderPath);
-      return { plans };
+      return {
+        plans,
+        totalScanned:   files.length,
+        unmatchedCount: files.length - plans.length,
+      };
     } catch (error) {
-      return { plans: [], error: error.message };
+      return { plans: [], totalScanned: 0, unmatchedCount: 0, error: error.message };
     }
   });
 
